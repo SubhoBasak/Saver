@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register | Saver{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column">
+    <img src="{% static 'images/register.png' %}" alt="user" class="mx-auto rounded-circle" width="64" height="64" />
+    <h1 class="mx-auto my-3">Register Now</h1>
+</div>
+<hr class="border-5 border-warning w-100" />
+<div class="container">
+    <form class="border border-1 rounded p-3 m-3" method="POST">
+        {% csrf_token %}
+        {% if messages %}
+        {% for message in messages %}
+        <p class="alert alert-{{message.tags}}">
+            {{message}}
+        </p>
+        {% endfor %}
+        {% endif %}
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input class="form-control" name="email" type="email" placeholder="Enter your email" required />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input class="form-control" name="password" type="password" placeholder="Enter your password" required />
+        </div>
+        <p class="text-secondary my-2">Already have an account?<a class="text-primary ms-1"
+                href="{% url 'login' %}">Login now</a></p>
+        <p class="text-secondary my-2">Back to<a class="text-primary ms-1" href="/">Home</a></p>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-primary rounded-pill">Register Now</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

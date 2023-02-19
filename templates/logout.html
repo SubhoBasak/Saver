@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Logout | Saver{% endblock %}
+
+{% block content %}
+<h1 class="my-5 w-100 text-center">Logged Out Successfully!!!</h1>
+<hr class="border-5 border-warning w-100 my-3" />
+<div class="d-flex flex-column justify-content-center align-items-center">
+    <a class="btn btn-outline-primary rounded-pill mt-2 w-50" href="/">Back to Home</a>
+    <a class="btn btn-primary rounded-pill mt-2 w-50" href="{% url 'login' %}">Login Again</a>
+    <a class="btn btn-outline-primary rounded-pill mt-2 w-50" href="{% url 'register' %}">Create new Account</a>
+</div>
+{% endblock %}

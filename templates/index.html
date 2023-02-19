@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Welcome | Saver{% endblock %}
+
+{% block content %}
+<div class="container d-flex flex-column align-items-center">
+    <img src="https://picsum.photos/512" width="320" height="320" class="rounded-3 my-3 border border-2 border-warning"
+        alt="welcome" />
+</div>
+<div class="bg-warning w-100 p-3 py-4 border-top border-5 border-primary">
+    <div class="container">
+        <h1>Let's save someone's precious life</h1>
+        <div class="d-flex mt-5">
+            <a href="{% url 'login' %}" class="btn btn-primary mx-auto rounded-pill">Login Now</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
