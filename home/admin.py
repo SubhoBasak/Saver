@@ -11,6 +11,9 @@ class IncidentAdmin(admin.ModelAdmin):
         return format_html(f"<img src={obj.image} width='512' height='512' />")
 
     def location_info(self, obj):
+        if obj.location == None:
+            return ''
+        
         if obj.location.startswith("[::GPS::]"):
             loc = obj.location[9:]
             loc = loc.split('|')
