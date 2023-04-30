@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Incident Details | Saver{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column">
+    <img src="{% static 'images/note.png' %}" alt="user" class="mx-auto" width="64" height="64" />
+    <h1 class="mx-auto my-3">Incident Details</h1>
+</div>
+<hr class="border-5 border-warning w-100" />
+<div class="container">
+    <form class="border border-1 rounded p-3 m-3" action="{% url 'detail' %}" method="POST">
+        {% csrf_token %}
+        {% if messages %}
+        {% for message in messages %}
+        <p class="alert alert-{{message.tags}}">
+            {{message}}
+        </p>
+        {% endfor %}
+        {% endif %}
+        <div class="mb-3">
+            <input type="hidden" name="iid" value="{{iid}}" />
+            <label class="form-label fw-bold">Title</label>
+            <input class="form-control mb-3" name="title" type="text" maxlength="100"
+                placeholder="i.e Bike accident near mankundu station" required />
+            <label class="form-label fw-bold">Accident Type</label>
+            <select name="type" class="form-select mb-3" required>
+                <option value="">Select accident type</option>
+                <option value="0">Road Accident</option>
+                <option value="1">Domestic Accident</option>
+                <option value="2">Industrial Accident</option>
+            </select>
+            <label class="form-label fw-bold" name="location" id="loc-lbl">Location</label>
+            <textarea name="location" class="form-control mb-3" rows="3" id="loc" required></textarea>
+            <label class="form-label text-secondary fw-bold">Details</label>
+            <textarea name="details" class="form-control mb-3" rows="6"></textarea>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary rounded-pill">Submit</button>
+        </div>
+    </form>
+    <form class="d-flex justify-content-center" action="{% url 'detail' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" value="{{iid}}" name="del-iid" />
+        <button type="submit" class="btn btn-danger rounded-pill">Cancel</button>
+    </form>
+</div>
+<script>
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((loc) => {
+            document.getElementById("loc").innerHTML = `[::GPS::]${loc.coords.latitude}|${loc.coords.longitude}`
+            document.getElementById("loc").style.display = 'none'
+            document.getElementById("loc-lbl").style.display = 'none'
+        });
+    }
+</script>
+{% endblock %}

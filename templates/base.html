@@ -9,19 +9,25 @@
     <title>{% block title %}{% endblock %}</title>
     <link href="{% static 'images/logo.png' %}" rel="shortcut icon" />
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+    <style>
+        @font-face {
+            font-family: lobster;
+            src: url({% static 'fonts/lobster.ttf' %});
+        }
+    </style>
 </head>
 
 <body>
     <nav>
         <div class="container d-flex justify-content-between p-3">
-            <a href="/" class="nav-brand">Saver</a>
+            <a href="/" class="nav-brand fs-3 text-dark" style="font-family: lobster; text-decoration: none;">Saver</a>
             <a href="{% url 'profile' %}">
                 <img src="{% static 'images/logo.png' %}" class="rounded-circle" width="36" height="36" alt="user" />
             </a>
         </div>
     </nav>
     {% block content %}{% endblock %}
-    <script src="{% static 'bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
 
 </html>

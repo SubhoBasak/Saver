@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Capture Incident | Saver{% endblock %}
+
+{% block content %}
+<h1 class="w-100 text-center">Report new incident</h1>
+<hr class="w-100 border-5 border-warning" />
+{% if messages %}
+{% for message in messages %}
+<p class="alert alert-{{message.tags}}">
+    {{message}}
+</p>
+{% endfor %}
+{% endif %}
+<div class="d-flex flex-column align-items-center justify-content-center">
+    <div id="cam" class="rounded-3 border border-2 border-warning" width="320" height="320"></div>
+    <button id="cap" onclick="take_snapshot()" class="btn btn-primary rounded-pill mt-3"
+        href="{% url 'capture' %}">Capture Now</button>
+
+    <div id="img" class="rounded-3 border border-2 border-warning" width="320" height="320" style="object-fit: cover;">
+    </div>
+    <form id="next" method="POST" style="display: none;">
+        {% csrf_token %}
+        <input type="hidden" id="img-data" name="img" />
+        <button type="submit" class="btn btn-primary rounded-pill mt-3">Continue</button>
+    </form>
+    <a href="{% url 'home' %}" class="btn btn-danger rounded-pill mt-3">Cancel</a>
+</div>
+<script src="{% static 'js/webcam.min.js' %}"></script>
+<script>
+    Webcam.set({
+        width: 320,
+        height: 320,
+        image_format: 'jpeg',
+        jpeg_quality: 90
+    });
+    Webcam.attach('#cam');
+
+    function take_snapshot() {
+        Webcam.snap(function (data_uri) {
+            document.getElementById("cam").style.display = 'none';
+            document.getElementById("cap").style.display = 'none';
+            document.getElementById("next").style.display = 'flex'
+            document.getElementById('img').innerHTML =
+                '<img src="' + data_uri + '"/>';
+            document.getElementById("img-data").value = data_uri
+        });
+    }
+</script>
+{% endblock %}

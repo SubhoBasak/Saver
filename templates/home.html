@@ -14,8 +14,8 @@
 {% endfor %}
 {% endif %}
 <div class="d-flex flex-column align-items-center justify-content-center">
-    <img class="rounded-3 border border-2 border-warning" src="https://picsum.photos/512" width="256" height="256"
-        alt="camera" />
+    <img class="rounded-3 border border-2 border-warning" src="{% static 'images/camera.png' %}" width="256"
+        height="256" alt="camera" />
     <a class="btn btn-primary rounded-pill mt-3" href="{% url 'capture' %}">Capture Now</a>
 </div>
 <div class="bg-warning w-100 p-3 py-4 mt-5 border-top border-5 border-primary">

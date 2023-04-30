@@ -4,6 +4,8 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.contrib import messages
+from django.http import HttpRequest
+from .models import IncidentModel
 from . import forms
 
 
@@ -52,8 +54,13 @@ def loginView(request):
                 if user.check_password(request.POST['password']):
                     login(request, user)
                     return redirect(reverse('home'))
-
-        except Exception:
+                else:
+                    messages.error(request, "You entered a wrong password!")
+        except User.DoesNotExist:
+            messages.add_message(request, messages.ERROR,
+                                 'No user found with this email!')
+        except Exception as e:
+            print(e)
             messages.add_message(request, messages.ERROR,
                                  'Something went wrong! Please try again.')
 
@@ -71,7 +78,36 @@ def homeView(request):
 
 @login_required
 def captureView(request):
+    if request.method == 'POST':
+        inc = IncidentModel()
+        inc.image = request.POST['img']
+        inc.save()
+
+        return render(request, 'details.html', {'iid': inc.id})
+
     return render(request, "capture.html")
+
+
+@login_required
+def detailView(request):
+    if request.method == 'POST':
+        if 'del-iid' in request.POST:
+            inc = IncidentModel.objects.get(id=request.POST['del-iid'])
+            inc.delete()
+        else:
+            inc = IncidentModel.objects.get(id=request.POST['iid'])
+
+            inc.title = request.POST['title']
+            inc.type = int(request.POST['type'])
+            inc.location = request.POST['location']
+            inc.details = request.POST['details']
+
+            inc.save()
+
+            messages.success(
+                request, 'Incident report submitted successfully!')
+
+    return redirect(reverse('home'))
 
 
 @login_required
@@ -86,3 +122,25 @@ def profileView(request):
         request.user.save()
 
     return render(request, "profile.html")
+
+
+@login_required
+def changePasswordView(request: HttpRequest):
+    if request.method == 'POST':
+        if request.user.check_password(request.POST['old']):
+            if request.POST['new1'] == request.POST['new2']:
+                if request.POST['new1'] != request.POST['old']:
+                    request.user.set_password(request.POST['new1'])
+                    request.user.save()
+
+                    messages.success(request, "Password changed successfully!")
+                    return redirect(reverse("profile"))
+                else:
+                    messages.error(
+                        request, "New & old password can't be same!")
+            else:
+                messages.error(request, 'New passwords doesn\'t match!')
+        else:
+            messages.error(request, 'Old password doesn\'t match!')
+
+    return render(request, 'password.html')
