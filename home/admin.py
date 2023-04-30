@@ -21,7 +21,7 @@ class IncidentAdmin(admin.ModelAdmin):
                     'location_info', 'type', 'status', 'date_time']
     fields = ['fullImg', 'title', 'date_time',
               'location_info', 'type', 'details', 'status']
-    readonly_fields = ['fullImg', 'location_info']
+    readonly_fields = ['fullImg', 'location_info', 'date_time']
 
 
 admin.site.register(models.IncidentModel, IncidentAdmin)
