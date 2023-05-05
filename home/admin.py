@@ -22,7 +22,7 @@ class IncidentAdmin(admin.ModelAdmin):
 
     list_display = ['thumbnail', 'title',
                     'location_info', 'type', 'status', 'date_time']
-    fields = ['fullImg', 'title', 'date_time',
+    fields = ['user', 'fullImg', 'title', 'date_time',
               'location_info', 'type', 'details', 'status']
     readonly_fields = ['fullImg', 'location_info', 'date_time']
 

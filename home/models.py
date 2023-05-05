@@ -1,7 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class IncidentModel(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True)
     image = models.TextField(default="", null=False, blank=False)
     title = models.CharField(max_length=100, null=True, blank=True)
     details = models.TextField(max_length=1000, null=True, blank=True)

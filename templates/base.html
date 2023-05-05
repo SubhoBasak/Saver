@@ -21,8 +21,9 @@
     <nav>
         <div class="container d-flex justify-content-between p-3">
             <a href="/" class="nav-brand fs-3 text-dark" style="font-family: lobster; text-decoration: none;">Saver</a>
-            <a href="{% url 'profile' %}">
+            <a href="{% url 'profile' %}" style="text-decoration: none;">
                 <img src="{% static 'images/logo.png' %}" class="rounded-circle" width="36" height="36" alt="user" />
+                <span style="font-size: 12px;" class="text-secondary">Profile</span>
             </a>
         </div>
     </nav>
