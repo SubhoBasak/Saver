@@ -10,5 +10,7 @@ urlpatterns = [
     path("login/", view=views.loginView, name='login'),
     path("logout/", view=views.LogoutView.as_view(), name='logout'),
     path("profile/", view=views.profileView, name='profile'),
-    path("password/", view=views.changePasswordView, name='password')
+    path("password/", view=views.changePasswordView, name='password'),
+    path("incidents/", view=views.incidentsView, name='incidents'),
+    path("incident/<int:iid>/", view=views.reportView, name='view')
 ]

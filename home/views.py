@@ -5,8 +5,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.contrib import messages
 from django.http import HttpRequest
+from django.utils import timezone
 from .models import IncidentModel
 from . import forms
+import datetime
 
 
 def indexView(request):
@@ -60,7 +62,6 @@ def loginView(request):
             messages.add_message(request, messages.ERROR,
                                  'No user found with this email!')
         except Exception as e:
-            print(e)
             messages.add_message(request, messages.ERROR,
                                  'Something went wrong! Please try again.')
 
@@ -79,8 +80,19 @@ def homeView(request):
 @login_required
 def captureView(request):
     if request.method == 'POST':
+        tmp = IncidentModel.objects.filter(
+            user=request.user).order_by('-id').last()
+
+        if tmp.date_time <= (timezone.now() - datetime.timedelta(minutes=10)):
+            messages.warning(
+                request, "You have to wait 10min before reporting another incident!")
+            return redirect(reverse("home"))
+
         inc = IncidentModel()
+
+        inc.user = request.user
         inc.image = request.POST['img']
+
         inc.save()
 
         return render(request, 'details.html', {'iid': inc.id})
@@ -144,3 +156,28 @@ def changePasswordView(request: HttpRequest):
             messages.error(request, 'Old password doesn\'t match!')
 
     return render(request, 'password.html')
+
+
+@login_required
+def incidentsView(request: HttpRequest):
+    incidents = IncidentModel.objects.filter(user=request.user).order_by('-id')
+
+    return render(request, 'incidents.html', {'incidents': incidents})
+
+
+@login_required
+def reportView(request: HttpRequest, iid):
+    try:
+        incident = IncidentModel.objects.get(id=iid)
+
+        gps = False
+
+        if incident.location != None and incident.location.startswith("[::GPS::]"):
+            loc = incident.location[9:]
+            loc = loc.split('|')
+
+            gps = f'https://www.google.com/maps/@{loc[0]},{loc[1]},18z'
+
+        return render(request, 'view.html', {'incident': incident, 'gps': gps})
+    except IncidentModel.DoesNotExist:
+        return redirect(reverse("home"))

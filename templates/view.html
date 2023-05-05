@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}View | Saver{% endblock %}
+
+{% block content %}
+<h1 class="w-100 text-center text-primary my-2">Incident Details</h1>
+<hr class="w-100 border-5 border-warning" />
+<div class="container">
+    <div class="row w-100 m-0 p-0">
+        <div class="col-sm-12 col-lg-6">
+            <img src="{{incident.image}}" class="w-75 rounded-3 mb-3" />
+        </div>
+        <div class="col-sm-12 col-lg-6">
+            <h1 class="mb-4">{{incident.title}}</h1>
+            <table class="table table-striped mb-4">
+                <tbody>
+                    <tr>
+                        <td class="fw-bold">Date time</td>
+                        <td>{{incident.date_time}}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Current status</td>
+                        <td>
+                            {% if incident.status %}
+                            Action taken <img src="{% static 'images/checked.png' %}" width="24" height="24" />
+                            {% else %}
+                            Not seen yet <img src="{% static 'images/time.png' %}" width="24" height="24" />
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Location</td>
+                        <td>
+                            {% if gps %}
+                            <a href="{{gps}}" target="_blank">View location</a>
+                            {% else %}
+                            {{incident.location}}
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            {% if incident.details %}
+            <p class="alert alert-warning mb-4">{{incident.details}}</p>
+            {% endif %}
+            <div class="w-100 d-flex justify-content-center">
+                <a class="btn btn-primary rounded-pill px-3" href="{% url 'incidents' %}">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

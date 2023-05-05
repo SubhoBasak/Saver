@@ -20,7 +20,7 @@
 
     <div id="img" class="rounded-3 border border-2 border-warning" width="320" height="320" style="object-fit: cover;">
     </div>
-    <form id="next" method="POST" style="display: none;">
+    <form id="next" method="POST" style="display: none;" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" id="img-data" name="img" />
         <button type="submit" class="btn btn-primary rounded-pill mt-3">Continue</button>

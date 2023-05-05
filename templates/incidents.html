@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Incidents | Saver{% endblock %}
+
+{% block content %}
+<h1 class="w-100 text-center text-primary my-2">Reported Incidents</h1>
+<hr class="w-100 border-5 border-warning" />
+<div class="container">
+    <div class="row w-100 m-0 p-0">
+        {% for inc in incidents %}
+        <div class="col-xs-12 col-md-6 col-lg-4 col-xl-3">
+            <a href="{% url 'view' inc.id %}"
+                class="d-flex flex-column border border-gray rounded-3 overflow-hidden p-2"
+                style="text-decoration: none">
+                <img src="{{inc.image}}" class="rounded-2" width="100%" />
+                <div class="w-100 d-flex justify-content-between my-3">
+                    <h2 class="w-75">{{inc.title}}</h2>
+                    <span class="w-25 d-flex justify-content-center">
+                        {% if inc.status %}
+                        <img src="{% static 'images/checked.png' %}" width="24" height="24" />
+                        {% else %}
+                        <img src="{% static 'images/time.png' %}" width="24" height="24" />
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="w-100 d-flex justify-content-between">
+                    <p class="px-1 py-0 my-0 alert alert-success text-nowrap" style="font-size: 12px">
+                        {{inc.date_time}}</p>
+                    <p class="px-1 py-0 my-0 alert alert-warning text-nowrap" style="font-size: 12px">
+                        {{inc.get_type_display}}</p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
