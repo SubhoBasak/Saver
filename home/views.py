@@ -83,7 +83,7 @@ def captureView(request):
         tmp = IncidentModel.objects.filter(
             user=request.user).order_by('-id').last()
 
-        if tmp.date_time <= (timezone.now() - datetime.timedelta(minutes=10)):
+        if tmp and tmp.date_time <= (timezone.now() - datetime.timedelta(minutes=10)):
             messages.warning(
                 request, "You have to wait 10min before reporting another incident!")
             return redirect(reverse("home"))
