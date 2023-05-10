@@ -79,15 +79,15 @@ def homeView(request):
 
 @login_required
 def captureView(request):
+    tmp = IncidentModel.objects.filter(
+        user=request.user).order_by('id').last()
+
+    if tmp and tmp.title and (tmp.date_time >= (timezone.now() - datetime.timedelta(minutes=10))):
+        messages.warning(
+            request, "You have to wait 10min before reporting another incident!")
+        return redirect(reverse("home"))
+
     if request.method == 'POST':
-        tmp = IncidentModel.objects.filter(
-            user=request.user).order_by('-id').last()
-
-        if tmp and tmp.date_time <= (timezone.now() - datetime.timedelta(minutes=10)):
-            messages.warning(
-                request, "You have to wait 10min before reporting another incident!")
-            return redirect(reverse("home"))
-
         inc = IncidentModel()
 
         inc.user = request.user
@@ -113,6 +113,7 @@ def detailView(request):
             inc.type = int(request.POST['type'])
             inc.location = request.POST['location']
             inc.details = request.POST['details']
+            inc.victim = request.POST['victim']
 
             inc.save()
 
@@ -160,7 +161,8 @@ def changePasswordView(request: HttpRequest):
 
 @login_required
 def incidentsView(request: HttpRequest):
-    incidents = IncidentModel.objects.filter(user=request.user).order_by('-id')
+    incidents = IncidentModel.objects.filter(
+        user=request.user).order_by('-id').exclude(title=None)
 
     return render(request, 'incidents.html', {'incidents': incidents})
 

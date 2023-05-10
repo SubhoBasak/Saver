@@ -3,6 +3,10 @@ from django.utils.html import format_html
 from . import models
 
 
+class Assign(admin.TabularInline):
+    model = models.AssignModel
+
+
 class IncidentAdmin(admin.ModelAdmin):
     def thumbnail(self, obj):
         return format_html(f"<img src={obj.image} width='128' height='128' />")
@@ -13,7 +17,7 @@ class IncidentAdmin(admin.ModelAdmin):
     def location_info(self, obj):
         if obj.location == None:
             return ''
-        
+
         if obj.location.startswith("[::GPS::]"):
             loc = obj.location[9:]
             loc = loc.split('|')
@@ -23,8 +27,9 @@ class IncidentAdmin(admin.ModelAdmin):
     list_display = ['thumbnail', 'title',
                     'location_info', 'type', 'status', 'date_time']
     fields = ['user', 'fullImg', 'title', 'date_time',
-              'location_info', 'type', 'details', 'status']
+              'location_info', 'type', 'details', 'victim', 'status']
     readonly_fields = ['fullImg', 'location_info', 'date_time']
+    inlines = [Assign]
 
 
 admin.site.register(models.IncidentModel, IncidentAdmin)
