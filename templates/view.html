@@ -42,9 +42,11 @@
                 </tbody>
             </table>
             {% if incident.details %}
+            <label class="fw-bold text-secondary">Details</label>
             <p class="alert alert-warning mb-4">{{incident.details}}</p>
             {% endif %}
             {% if incident.victim %}
+            <label class="fw-bold text-secondary">Victim</label>
             <p class="alert alert-primary mb-4">{{incident.victim}}</p>
             {% endif %}
             <div class="w-100 d-flex justify-content-center">
